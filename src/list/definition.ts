@@ -58,13 +58,16 @@ export const reverse = <A> (fa: List<A>): List<A> =>
 
 // toString: Fa -> string
 export const toString = <A> (fa: List<A>): string =>
-    `[${reduce(fa, (a: A, b: string) => b + String(a), '')}]`;
+    `[${reduce(fa, (a: A, b: string) => `${b ? `${b}, ` : ''}${String(a)}`, '')}]`;
 
 // Examples
-const fa = cons('1', cons('2', cons('3', empty())));
-const f = (a: string): List<string> => cons(a, cons('b', empty()));
-const ffb: List<List<string>> = map<string, List<string>>(fa)(f);
-const fb: List<string> = chain<string, string>(fa)(f);
+const fa = cons(1, cons(2, cons(3, empty())));
 
-console.log(toString(ffb));
-console.log(toString(fb));
+const f = (a: number): number => a * 2
+const g = (a: number): number => a * 10
+
+const ff = cons(f, cons(g, empty()));
+
+const testAp: List<number> = ap<number, number>(fa)(ff)
+
+console.log(toString(testAp));
