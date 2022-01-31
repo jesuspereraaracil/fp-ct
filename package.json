@@ -5,7 +5,7 @@
   "main": "src/index.ts",
   "scripts": {
     "test": "jest",
-    "start": "ts-node src/maybe/definition.ts"
+    "start": "ts-node src/list/definition.ts"
   },
   "repository": {
     "type": "git",
