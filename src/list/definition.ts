@@ -65,9 +65,11 @@ const fa = cons(1, cons(2, cons(3, empty())));
 
 const f = (a: number): number => a * 2
 const g = (a: number): number => a * 10
-
 const ff = cons(f, cons(g, empty()));
 
+const testMap = map(fa)(f)
 const testAp: List<number> = ap<number, number>(fa)(ff)
 
+console.log(toString(fa));
+console.log(toString(testMap));
 console.log(toString(testAp));
