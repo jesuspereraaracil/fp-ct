@@ -26,7 +26,7 @@ export const of = <A> (a: A): List<A> =>
 // flatten :: F F a -> F a
 export const flatten = <A> (ffa: List<List<A>>): List<A> =>
     reduce<List<A>, List<A>>(ffa,
-        (next, acc) => concat(acc, next), empty());
+        (next, acc) => concat(acc)(next), empty());
 
 export const chain = <A, B> (fa: List<A>) => (f: (a: A) => List<B>): List<B> =>
     flatten(map<A, List<B>>(fa)(f));
@@ -34,22 +34,24 @@ export const chain = <A, B> (fa: List<A>) => (f: (a: A) => List<B>): List<B> =>
 // Applicative
 // ap :: Fa -> F(a -> b) -> Fb
 export const ap = <A, B>(fa: List<A>) => (ff: List<(a: A) => B>): List<B> =>
-    chain<A, B>(ff)(f => map(fa)(f))
+    chain<(a: A) => B, B>(ff)((f) => map<A, B>(fa)(f))
 
-// Aux functions
+// Semigroup
 // concat :: Fa -> Fa -> Fa
-export const concat = <A> (fa: List<A>, fb: List<A>): List<A> =>
+export const concat = <A> (fa: List<A>) => (fb: List<A>): List<A> =>
     isEmpty(fa) ? fb :
         isEmpty(fb)
             ? fb
-            : cons(fa.value, concat(fa.next, fb));
+            : cons(fa.value, concat(fa.next)(fb));
 
+// Foldable
 // reduce :: Fa -> B
 export const reduce = <A, B> (fa: List<A>, f: (next: A, acc: B) => B, first: B): B =>
     isEmpty(fa)
         ? first
         : reduce(fa.next, f, f(fa.value, first));
 
+// Aux functions
 // reverse :: Fa -> Fa
 export const reverse = <A> (fa: List<A>): List<A> =>
     reduce(fa, (next, acc) => cons(next, acc), empty() as List<A>);
